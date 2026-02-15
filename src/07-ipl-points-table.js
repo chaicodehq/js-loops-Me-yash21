@@ -38,4 +38,64 @@
  */
 export function iplPointsTable(matches) {
   // Your code here
+  if(!Array.isArray(matches) || matches.length ===0){
+    return []
+  }
+
+  let scoreObj = {}
+
+  for (const match of matches) {
+    const team1 = match.team1;
+    const team2 = match.team2
+    if(!scoreObj[team1]){
+      scoreObj[team1] = {
+        team: team1, played:0, won:0, lost:0, tied:0, noResult:0, points:0
+      }
+    }
+    if(!scoreObj[team2]){
+      scoreObj[team2] = {
+        team: team2, played:0, won:0, lost:0, tied:0, noResult:0, points:0
+      }
+    }
+
+    if(match.result === "win"){
+      const winnerTeam = match.winner;
+      const lostTeam = (winnerTeam === team1) ? team2 : team1;
+      scoreObj[winnerTeam]["played"] += 1;
+      scoreObj[winnerTeam]["won"] += 1;
+      scoreObj[winnerTeam]["points"] += 2;
+      
+      scoreObj[lostTeam]["played"] += 1;
+      scoreObj[lostTeam]["lost"] += 1;
+
+    }else if(match.result === "tie"){
+      scoreObj[team1]["played"] += 1 
+      scoreObj[team1]["tied"] += 1;
+      scoreObj[team1]["points"] += 1;
+      
+      scoreObj[team2]["played"] += 1 
+      scoreObj[team2]["tied"] += 1;
+      scoreObj[team2]["points"] += 1;
+      
+    }else if(match.result === "no_result"){
+      scoreObj[team1]["played"] += 1 
+      scoreObj[team1]["noResult"] += 1;
+      scoreObj[team1]["points"] += 1;
+      
+      scoreObj[team2]["played"] += 1 
+      scoreObj[team2]["noResult"] += 1;
+      scoreObj[team2]["points"] += 1;
+      
+    }
+  }
+
+  let arrayOfMatchScores = Object.values(scoreObj);
+
+  arrayOfMatchScores.sort((a,b)=>{
+    // Rule 1: Sort by points (descending)
+    // Rule 2: If points are equal, sort by team name (alphabetical)
+    return (b.points - a.points) || a.team.localeCompare(b.team)
+  })
+
+  return arrayOfMatchScores;
 }
