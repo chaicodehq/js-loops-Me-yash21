@@ -16,9 +16,9 @@
  *
  * Pattern for n=3:
  *     *
- *   * *
+ *    * *
  *   * * *
- *   * *
+ *    * *
  *     *
  *
  * (Each row is a string in the returned array)
@@ -37,4 +37,31 @@
  */
 export function rangoli(n) {
   // Your code here
+  if(typeof n !== "number" || !Number.isInteger(n) || n<=0)
+    return [];
+
+  let rangoli = [];
+  
+  // upper half pattern
+  for (let i = 1; i <= n; i++) {
+      let columnLenght = (i+(n-1)) ;
+
+      let startPattern = Array(i).fill("*").join(" ");
+      let rowString = startPattern.padStart(columnLenght, " ");
+      
+      rangoli.push(rowString);
+  }
+
+  // bottom half pattern
+  for (let i=n-1 ;i>=1;i--){
+      let columnLenght = (i+(n-1));
+
+      let startPattern = Array(i).fill("*").join(" ")
+      let rowString = startPattern.padStart(columnLenght," ")
+
+      rangoli.push(rowString)
+  }
+
+
+  return rangoli;
 }
